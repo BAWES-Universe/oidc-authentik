@@ -1,0 +1,52 @@
+services:
+  # Replace postgresql service with a minimal no-op - using Railway's managed Postgres
+  # This satisfies the depends_on requirement. Railway may not start this if not needed.
+  postgresql:
+    image: alpine:latest
+    command: sh -c "echo 'Postgres handled by Railway - this service is a placeholder' && sleep infinity"
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'ok'"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 0s
+    restart: "no"
+
+  server:
+    # Simplify depends_on - remove healthcheck condition since we're using Railway Postgres
+    depends_on:
+      - postgresql
+    environment:
+      # Override database connection to use Railway's Postgres variables
+      # Railway automatically provides: PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD
+      AUTHENTIK_POSTGRESQL__HOST: ${PGHOST}
+      AUTHENTIK_POSTGRESQL__PORT: ${PGPORT:-5432}
+      AUTHENTIK_POSTGRESQL__NAME: ${PGDATABASE}
+      AUTHENTIK_POSTGRESQL__USER: ${PGUSER}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PGPASSWORD}
+    # Remove Traefik labels - Railway handles routing and SSL automatically
+    labels: []
+    # Expose port 9000 - Railway will route traffic here and handle SSL/TLS
+    ports:
+      - "9000:9000"
+
+  worker:
+    # Simplify depends_on - remove healthcheck condition since we're using Railway Postgres
+    depends_on:
+      - postgresql
+    environment:
+      # Override database connection to use Railway's Postgres variables
+      # Railway automatically provides: PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD
+      AUTHENTIK_POSTGRESQL__HOST: ${PGHOST}
+      AUTHENTIK_POSTGRESQL__PORT: ${PGPORT:-5432}
+      AUTHENTIK_POSTGRESQL__NAME: ${PGDATABASE}
+      AUTHENTIK_POSTGRESQL__USER: ${PGUSER}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PGPASSWORD}
+
+  # Disable Traefik - Railway handles SSL/TLS termination automatically
+  traefik:
+    image: alpine:latest
+    command: echo "Traefik not needed - Railway handles SSL automatically"
+    profiles:
+      - never
+
