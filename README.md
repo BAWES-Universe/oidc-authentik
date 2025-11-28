@@ -64,26 +64,35 @@ Certificates are automatically issued and stored in `./letsencrypt` (created on 
 
 ## Railway deployment
 
-Deploy on Railway using Railway's managed PostgreSQL service and automatic SSL/TLS. See [RAILWAY.md](./RAILWAY.md) for detailed instructions.
+Deploy on Railway using Dockerfiles and Railway's managed PostgreSQL service. Railway requires **one Dockerfile per service** (not docker-compose). See [RAILWAY.md](./RAILWAY.md) for detailed instructions.
 
 **Key advantages:**
 - ✅ **No Traefik needed** - Railway automatically handles SSL/TLS termination
 - ✅ **Automatic HTTPS** - Railway issues and renews Let's Encrypt certificates automatically
 - ✅ **Managed PostgreSQL** - Railway provides a fully managed database service
+- ✅ **Simple Dockerfiles** - One Dockerfile per service (server and worker)
+
+**Project structure:**
+- `Dockerfile.server` - For the Authentik server service (exposes port 9000)
+- `Dockerfile.worker` - For the Authentik worker service (background tasks)
 
 **Quick start:**
 1. Create a Railway project and add a PostgreSQL service
-2. Set `AUTHENTIK_SECRET_KEY` in Railway's environment variables (generate a secure random string)
-3. Configure the service to expose port `9000` (already configured in `docker-compose.railway.yml`)
-4. Add your custom domain in Railway (optional - Railway will handle SSL automatically)
-5. Deploy using `docker-compose.railway.yml`:
+2. Deploy **Server service**:
+   - Add new service → Set Dockerfile path to `Dockerfile.server`
+   - Set port to `9000`
+   - Set environment variables (see [RAILWAY.md](./RAILWAY.md))
+3. Deploy **Worker service**:
+   - Add new service → Set Dockerfile path to `Dockerfile.worker`
+   - Set same environment variables as server
+4. Add custom domain (optional - Railway handles SSL automatically)
 
-   ```bash
-   docker compose -f docker-compose.yml -f docker-compose.railway.yml up -d
-   ```
-
-**Required environment variables:**
+**Required environment variables** (for both services):
 - `AUTHENTIK_SECRET_KEY` (must be set manually - generate a secure random string)
-- PostgreSQL variables (`PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`) are automatically provided by Railway
+- `AUTHENTIK_POSTGRESQL__HOST=${PGHOST}` (Railway provides `PGHOST` automatically)
+- `AUTHENTIK_POSTGRESQL__PORT=${PGPORT}`
+- `AUTHENTIK_POSTGRESQL__NAME=${PGDATABASE}`
+- `AUTHENTIK_POSTGRESQL__USER=${PGUSER}`
+- `AUTHENTIK_POSTGRESQL__PASSWORD=${PGPASSWORD}`
 
-See [RAILWAY.md](./RAILWAY.md) for complete documentation on environment variables, SSL configuration, and deployment steps.
+See [RAILWAY.md](./RAILWAY.md) for complete step-by-step deployment instructions.

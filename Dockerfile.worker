@@ -1,0 +1,15 @@
+# Dockerfile for Authentik Worker
+# Railway will use this to deploy the worker service
+FROM ghcr.io/goauthentik/server:2025.10.2
+
+# Set the command to run the worker
+CMD ["worker"]
+
+# Worker doesn't expose HTTP ports, but Railway needs a port for health checks
+# Authentik worker runs background tasks, so we expose a dummy port
+EXPOSE 8000
+
+# Railway will automatically handle:
+# - Environment variables
+# - Service networking
+

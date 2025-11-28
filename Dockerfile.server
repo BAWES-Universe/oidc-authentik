@@ -1,0 +1,15 @@
+# Dockerfile for Authentik Server
+# Railway will use this to deploy the server service
+FROM ghcr.io/goauthentik/server:2025.10.2
+
+# Set the command to run the server
+CMD ["server"]
+
+# Expose port 9000 (Authentik's default port)
+EXPOSE 9000
+
+# Railway will automatically handle:
+# - SSL/TLS termination
+# - Port mapping
+# - Environment variables
+
