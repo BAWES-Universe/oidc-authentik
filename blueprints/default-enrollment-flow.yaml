@@ -1,0 +1,224 @@
+context: {}
+entries:
+- attrs:
+    authentication: require_unauthenticated
+    denied_action: message_continue
+    designation: enrollment
+    layout: stacked
+    name: Default enrollment Flow
+    policy_engine_mode: any
+    title: Welcome to Universe!
+  conditions: []
+  identifiers:
+    pk: 57dbbf26-9fe0-4450-ba88-f4356984031e
+    slug: default-enrollment-flow
+  model: authentik_flows.flow
+  permissions: []
+  state: present
+- attrs:
+    field_key: name
+    label: Name
+    name: default-enrollment-field-name
+    order: 0
+    placeholder: Name
+    required: true
+    type: text
+  conditions: []
+  identifiers:
+    pk: 318caffb-2423-41cc-98cd-72345ee39f4f
+  model: authentik_stages_prompt.prompt
+  permissions: []
+  state: present
+- attrs:
+    field_key: email
+    label: Email
+    name: default-enrollment-field-email
+    order: 1
+    placeholder: Email
+    required: true
+    type: email
+  conditions: []
+  identifiers:
+    pk: 94065567-985d-49fc-bf03-0942f44b8a14
+  model: authentik_stages_prompt.prompt
+  permissions: []
+  state: present
+- attrs:
+    field_key: username
+    label: Username
+    name: default-enrollment-field-username
+    order: 0
+    placeholder: Username
+    required: true
+    type: username
+  conditions: []
+  identifiers:
+    pk: 98b642ec-0c96-4cf1-941b-31bc8d9c407f
+  model: authentik_stages_prompt.prompt
+  permissions: []
+  state: present
+- attrs:
+    field_key: password
+    label: Password
+    name: default-enrollment-field-password
+    order: 0
+    placeholder: Password
+    required: true
+    type: password
+  conditions: []
+  identifiers:
+    pk: 23525c12-a49e-430a-bbc2-b8157e6de3ba
+  model: authentik_stages_prompt.prompt
+  permissions: []
+  state: present
+- attrs:
+    field_key: password_repeat
+    label: Password (repeat)
+    name: default-enrollment-field-password-repeat
+    order: 1
+    placeholder: Password (repeat)
+    required: true
+    type: password
+  conditions: []
+  identifiers:
+    pk: edce1790-a349-4358-9b6f-f902754cbf26
+  model: authentik_stages_prompt.prompt
+  permissions: []
+  state: present
+- attrs:
+    activate_user_on_success: true
+    from_address: system@authentik.local
+    host: localhost
+    port: 25
+    recovery_cache_timeout: minutes=5
+    recovery_max_attempts: 5
+    subject: Universe Email Verification
+    template: email/account_confirmation.html
+    timeout: 10
+    token_expiry: minutes=30
+    use_global_settings: true
+  conditions: []
+  identifiers:
+    name: default-enrollment-email-verification
+    pk: fb3f5fda-6dd7-43a9-8c1e-8512c55fd53d
+  model: authentik_stages_email.emailstage
+  permissions: []
+  state: present
+- attrs:
+    create_users_as_inactive: true
+    create_users_group: 9c9c6299-c628-4dd6-ada8-a7efda1d78a4
+    user_creation_mode: always_create
+    user_type: external
+  conditions: []
+  identifiers:
+    name: default-enrollment-user-write
+    pk: 046fa687-11a7-4c7d-92d3-f30f9c36f87e
+  model: authentik_stages_user_write.userwritestage
+  permissions: []
+  state: present
+- attrs:
+    fields:
+    - 98b642ec-0c96-4cf1-941b-31bc8d9c407f
+    - 23525c12-a49e-430a-bbc2-b8157e6de3ba
+    - edce1790-a349-4358-9b6f-f902754cbf26
+  conditions: []
+  identifiers:
+    name: default-enrollment-prompt-first
+    pk: e0ee65b2-003f-468a-b42e-822e342cb4dd
+  model: authentik_stages_prompt.promptstage
+  permissions: []
+  state: present
+- attrs:
+    fields:
+    - 318caffb-2423-41cc-98cd-72345ee39f4f
+    - 94065567-985d-49fc-bf03-0942f44b8a14
+  conditions: []
+  identifiers:
+    name: default-enrollment-prompt-second
+    pk: e988357e-18c1-4d68-94dc-7e58258d51bb
+  model: authentik_stages_prompt.promptstage
+  permissions: []
+  state: present
+- attrs:
+    geoip_binding: no_binding
+    network_binding: no_binding
+    remember_device: days=30
+    remember_me_offset: seconds=0
+    session_duration: seconds=0
+  conditions: []
+  identifiers:
+    name: default-enrollment-user-login
+    pk: 9d41804b-5165-4193-91b7-9f4fcdf65852
+  model: authentik_stages_user_login.userloginstage
+  permissions: []
+  state: present
+- attrs:
+    invalid_response_action: retry
+    policy_engine_mode: any
+    re_evaluate_policies: true
+  conditions: []
+  identifiers:
+    order: 10
+    pk: 73bd26f0-df7a-456e-84c8-23c3bebfff20
+    stage: e0ee65b2-003f-468a-b42e-822e342cb4dd
+    target: 57dbbf26-9fe0-4450-ba88-f4356984031e
+  model: authentik_flows.flowstagebinding
+  permissions: []
+  state: present
+- attrs:
+    invalid_response_action: retry
+    policy_engine_mode: any
+    re_evaluate_policies: true
+  conditions: []
+  identifiers:
+    order: 11
+    pk: 22ac6ed6-3216-4ed5-b20a-790f8877940a
+    stage: e988357e-18c1-4d68-94dc-7e58258d51bb
+    target: 57dbbf26-9fe0-4450-ba88-f4356984031e
+  model: authentik_flows.flowstagebinding
+  permissions: []
+  state: present
+- attrs:
+    invalid_response_action: retry
+    policy_engine_mode: any
+    re_evaluate_policies: true
+  conditions: []
+  identifiers:
+    order: 20
+    pk: 0ae527a7-02c8-4215-9329-95e8cfc4975e
+    stage: 046fa687-11a7-4c7d-92d3-f30f9c36f87e
+    target: 57dbbf26-9fe0-4450-ba88-f4356984031e
+  model: authentik_flows.flowstagebinding
+  permissions: []
+  state: present
+- attrs:
+    invalid_response_action: retry
+    policy_engine_mode: any
+    re_evaluate_policies: true
+  conditions: []
+  identifiers:
+    order: 30
+    pk: 79160391-52cd-4477-bd1c-bebd888435f7
+    stage: fb3f5fda-6dd7-43a9-8c1e-8512c55fd53d
+    target: 57dbbf26-9fe0-4450-ba88-f4356984031e
+  model: authentik_flows.flowstagebinding
+  permissions: []
+  state: present
+- attrs:
+    invalid_response_action: retry
+    policy_engine_mode: any
+    re_evaluate_policies: true
+  conditions: []
+  identifiers:
+    order: 100
+    pk: 99f65a21-aee8-49ef-8c41-717573c9c854
+    stage: 9d41804b-5165-4193-91b7-9f4fcdf65852
+    target: 57dbbf26-9fe0-4450-ba88-f4356984031e
+  model: authentik_flows.flowstagebinding
+  permissions: []
+  state: present
+metadata:
+  labels:
+    blueprints.goauthentik.io/generated: 'true'
+  name: authentik Export - 2025-12-17 21:32:05.016259+00:00
+version: 1
