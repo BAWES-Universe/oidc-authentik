@@ -1,0 +1,12 @@
+/* Custom Authentik UI tweaks */
+
+/* Hide "Powered by authentik" footer and similar footer elements */
+.pf-c-footer,
+.ak-footer,
+[class*="footer"],
+.pf-c-page__main-footer,
+footer {
+    display: none !important;
+}
+
+

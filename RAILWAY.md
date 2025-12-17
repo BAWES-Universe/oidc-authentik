@@ -72,7 +72,7 @@ AUTHENTIK_POSTGRESQL__PASSWORD=${PGPASSWORD}
 1. Create a new Railway project
 2. Add a PostgreSQL service (Railway will automatically provide database connection variables)
 
-### Step 2: Deploy Server Service
+### Step 2: Deploy Server Service (with custom branding)
 
 1. **Add a new service** in Railway:
    - Click "New" → "GitHub Repo" (or "Empty Service")
@@ -93,7 +93,26 @@ AUTHENTIK_POSTGRESQL__PASSWORD=${PGPASSWORD}
    AUTHENTIK_POSTGRESQL__PASSWORD=${PGPASSWORD}
    ```
 
-4. **Deploy** - Railway will automatically build and deploy using `Dockerfile.server`
+4. **(Optional) Custom branding assets**
+
+   This repository includes a `custom-assets` directory and a `custom.css` file, which are baked into the Docker image by `Dockerfile.server`:
+
+   - `custom-assets/logo-300x150.png` → `/media/custom/logo-300x150.png`
+   - `custom-assets/favicon-trans-512x512.png` → `/media/custom/favicon-trans-512x512.png`
+   - `custom-assets/background.png` → `/media/custom/background.png`
+   - `custom.css` → `/web/dist/custom.css` (used to hide the "Powered by authentik" footer and similar elements)
+
+   After the first deployment and initial setup:
+
+   1. Log into the Authentik admin UI.
+   2. Go to **System → Brands** and edit your brand.
+   3. Set the following paths in the branding settings:
+      - **Logo**: `/media/custom/logo-300x150.png`
+      - **Favicon**: `/media/custom/favicon-trans-512x512.png`
+      - **Default flow background**: `/media/custom/background.png`
+   4. Save the brand.
+
+5. **Deploy** - Railway will automatically build and deploy using `Dockerfile.server`
 
 ### Step 3: Deploy Worker Service
 

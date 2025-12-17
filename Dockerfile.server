@@ -2,6 +2,25 @@
 # Railway will use this to deploy the server service
 FROM ghcr.io/goauthentik/server:2025.10.2
 
+#
+# Custom branding assets
+# These are baked into the image so Railway can serve them without extra volumes.
+#
+# Logo
+COPY custom-assets/logo-300x150.png /media/custom/logo-300x150.png
+
+# Favicon
+COPY custom-assets/favicon-trans-512x512.png /media/custom/favicon-trans-512x512.png
+
+# Default flow background image
+COPY custom-assets/background.png /media/custom/background.png
+
+#
+# Optional: custom CSS to hide/override parts of the UI (e.g. "Powered by authentik" footer)
+# If you don't want this, remove the COPY below.
+#
+COPY custom.css /web/dist/custom.css
+
 # Set the command to run the server
 CMD ["server"]
 
