@@ -62,6 +62,21 @@ https://docs.goauthentik.io/
 
 Certificates are automatically issued and stored in `./letsencrypt` (created on first run). Traefik listens on ports 80/443 in production to satisfy Let's Encrypt HTTP-01 validation and redirect HTTP → HTTPS.
 
+## Universe branding
+
+The Universe look is applied by baking custom files into the server image
+(`Dockerfile.server`):
+
+| source | destination | what it does |
+|---|---|---|
+| `custom-assets/` | `/media/custom/` | logo, favicon, default flow background |
+| `custom.css` | `/web/dist/custom.css` | hides the stock Authentik footer in the UI |
+| `custom-templates/email/` | `/templates/email/` | user-facing email templates (dark theme, brand mark, Universe copy) |
+
+See [custom-templates/email/README.md](./custom-templates/email/README.md) for the
+email templates: why they exist, the client-compatibility rules they follow, how to
+apply them to an already-running instance, and how to verify a change.
+
 ## Railway deployment
 
 Deploy on Railway using Dockerfiles and Railway's managed PostgreSQL service. Railway requires **one Dockerfile per service** (not docker-compose). See [RAILWAY.md](./RAILWAY.md) for detailed instructions.

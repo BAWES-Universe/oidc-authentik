@@ -21,6 +21,15 @@ COPY custom-assets/background.png /media/custom/background.png
 #
 COPY custom.css /web/dist/custom.css
 
+#
+# Universe email templates
+# Authentik searches /templates BEFORE its own built-in templates
+# (email.template_dir, default /templates), so files here win.
+# Covers password reset, email verification, notifications, email MFA and setup.
+# See custom-templates/email/README.md.
+#
+COPY --chown=1000:1000 custom-templates/email/ /templates/email/
+
 # Set the command to run the server
 CMD ["server"]
 

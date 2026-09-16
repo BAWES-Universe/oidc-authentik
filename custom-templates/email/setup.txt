@@ -1,0 +1,8 @@
+{% load i18n %}{% autoescape off %}Universe Test-Email
+{% blocktrans %}
+This is a test email to inform you, that you've successfully configured Universe emails.
+{% endblocktrans %}
+
+-- 
+Universe · universe.bawes.net
+{% endautoescape %}
